@@ -61,20 +61,18 @@ jobs:
         bundle config path vendor/bundle
         bundle install --jobs 4 --retry 3 --path vendor/bundle
 
-    - name: Create DB
+    - name: Set up MySQL
       env:
-        RAILS_ENV: test
-        MYSQL_PORT: 3306
-        MYSQL_PASSWORD: root
+        DB_DATABASE: food_diary_test
+        DB_USER: root
+        DB_PASSWORD: root
       run: |
-        sudo service mysql start
-        bin/rails db:prepare
+        sudo /etc/init.d/mysql start
+        mysql -e 'CREATE DATABASE ${{ env.DB_DATABASE }};' -u${{ env.DB_USER }} -p${{ env.DB_PASSWORD }}
 
     - name: Run tests
       env:
         RAILS_ENV: test
-        MYSQL_PORT: 3306
-        MYSQL_PASSWORD: root
       run: |
         bundle exec rubocop
         bundle exec brakeman
