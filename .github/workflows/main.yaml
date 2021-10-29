@@ -68,6 +68,7 @@ jobs:
         # tell Rails to use proper port for MySQL
         DB_PORT: ${{ job.services.mysql.ports[3306] }}
       run: |
+        sudo /etc/init.d/mysql start
         gem install bundler --version 2.2.29 --no-document
         bundle config path vendor/bundle
         bundle install --jobs 4 --retry 3 --path vendor/bundle
