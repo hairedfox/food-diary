@@ -4,6 +4,10 @@ name: Main
 on: [push]
 
 jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - uses: AutoModality/action-clean@v1
   specs:
     name: CI
     runs-on: ubuntu-latest
@@ -39,9 +43,6 @@ jobs:
             coverage: 'true'
 
     steps:
-    - name: Clean
-      uses: AutoModality/action-clean@v1
-
     - name: Checkout
       uses: actions/checkout@v1
 
