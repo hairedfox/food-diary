@@ -3,6 +3,8 @@ require: rubocop-rails
 AllCops:
   NewCops: enable
 
+Metrics/BlockLength:
+  Enabled: false
 Style/Documentation:
   Enabled: false
 Rails/FilePath:
