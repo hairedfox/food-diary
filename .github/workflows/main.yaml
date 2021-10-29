@@ -18,11 +18,10 @@ jobs:
           MYSQL_HOST: 127.0.0.1
           MYSQL_DB: food_diary_test
           MYSQL_USER: root
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_PASSWORD:
+          MYSQL_PASSWORD: root
         ports:
         - "3306:3306"
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=5
 
     steps:
     - name: Clean
@@ -64,8 +63,8 @@ jobs:
     - name: Create DB
       env:
         RAILS_ENV: test
-        DATABASE_PORT: 3306
-        # tell Rails to use proper port for MySQL
+        DB_PORT: 3306
+        DB_PASSWORD: root
       run: |
         sudo service mysql start
         bin/rails db:prepare
@@ -73,7 +72,8 @@ jobs:
     - name: Run tests
       env:
         RAILS_ENV: test
-        DATABASE_PORT: 3306
+        DB_PORT: 3306
+        DB_PASSWORD: root
       run: |
         bundle exec rubocop
         bundle exec brakeman
