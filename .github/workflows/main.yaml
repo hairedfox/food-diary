@@ -20,7 +20,7 @@ jobs:
         image: mysql:5.7
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_DATABASE: test_db
+          MYSQL_DATABASE: food_diary_test
         ports:
           - 3306
         options: >-
@@ -68,8 +68,6 @@ jobs:
         sudo apt-get install -y mysql-client libmysqlclient-dev
         mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -uroot -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY ''; FLUSH PRIVILEGES;"
 
-        mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -uroot mysql
-
     - name: Bundle Install and Create DB
       run: |
         gem install bundler --version 2.2.29 --no-document
@@ -83,7 +81,8 @@ jobs:
         DB_PORT: ${{ job.services.mysql.ports[3306] }}
       run: |
         # create DB for Rails 6.x
-        bin/rails db:prepare
+        bin/rails db:create
+        bin/rails db:migrate
 
     - name: Run tests
       env:
