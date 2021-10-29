@@ -53,6 +53,7 @@ group :development do
   gem 'guard'
   gem 'guard-rspec', require: false
   gem 'spring'
+  gem 'brakeman'
 end
 
 group :test do
