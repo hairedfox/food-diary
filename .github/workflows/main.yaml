@@ -76,7 +76,7 @@ jobs:
         # tell Rails to use proper port for MySQL
         DB_PORT: ${{ job.services.mysql.ports[3306] }}
       run: |
-        mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -uroot -proot -e "ALTER USER 'root'@'localhost' IDENTIFIED BY ''; FLUSH PRIVILEGES;"
+        mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports[3306] }} -uroot -proot -e "ALTER USER 'root'@'localhost' IDENTIFIED BY ''; ALTER USER 'root'@'%' IDENTIFIED BY ''; FLUSH PRIVILEGES;"
         sudo /etc/init.d/mysql start
         bin/rails db:prepare
 
