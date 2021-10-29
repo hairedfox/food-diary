@@ -16,7 +16,7 @@ jobs:
       mysql:
         image: mysql:5.7
         env:
-          MYSQL_ROOT_PASSWORD: root
+          MYSQL_ROOT_PASSWORD: ""
         ports:
         - 3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -64,7 +64,6 @@ jobs:
     - name: Bundle Install and Create DB
       env:
         RAILS_ENV: test
-        DB_PASSWORD: root
         # tell Rails to use proper port for MySQL
         DB_PORT: ${{ job.services.mysql.ports[3306] }}
       run: |
@@ -77,7 +76,6 @@ jobs:
 
     - name: Run tests
       env:
-        DB_PASSWORD: root
         DB_PORT: ${{ job.services.mysql.ports[3306] }} # get randomly assigned published port
         RAILS_ENV: test
       run: |
