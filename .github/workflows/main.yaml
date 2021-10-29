@@ -3,10 +3,6 @@ name: Main
 on: [push]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: AutoModality/action-clean@v1
   specs:
     name: CI
     runs-on: ubuntu-latest
@@ -29,6 +25,9 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
+    - name: Clean
+      uses: AutoModality/action-clean@v1
+
     - name: Checkout
       uses: actions/checkout@v1
       with:
