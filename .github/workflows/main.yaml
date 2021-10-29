@@ -39,6 +39,9 @@ jobs:
             coverage: 'true'
 
     steps:
+    - name: Clean
+      uses: AutoModality/action-clean@v1
+
     - name: Checkout
       uses: actions/checkout@v1
 
