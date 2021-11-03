@@ -1,0 +1,52 @@
+FROM ruby:3.0.1-alpine
+
+MAINTAINER duong.ta1 <duongtavan94@gmail.com>
+
+ENV BUILD_PACKAGES="vim curl curl-dev ruby-dev build-base bash less git openssh python2 make g++" \
+    DEV_PACKAGES="zlib-dev libxml2-dev libxslt-dev tzdata yaml-dev mysql-dev imagemagick imagemagick-dev imagemagick-c++ ffmpeg" \
+    RUBY_PACKAGES="ruby-json yaml nodejs yarn" \
+    LANG=ja_JP.UTF-8 \
+    PATH=/root/.yarn/bin:$PATH \
+    APP_ROOT=/usr/src/app
+
+### set timezone ###########################
+
+RUN apk --update add tzdata \
+ && cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime \
+ && apk del tzdata \
+ && rm -rf /var/cache/apk/*
+
+############################################
+
+### install packages #######################
+
+RUN apk update \
+ && apk upgrade \
+ && apk add --update $BUILD_PACKAGES $DEV_PACKAGES $RUBY_PACKAGES \
+ && rm -rf /var/cache/apk/* \
+ && /bin/bash \
+ && mkdir -p $APP_ROOT
+
+############################################
+
+WORKDIR /tmp
+
+### install RubyGems #######################
+
+COPY Gemfile ./
+
+RUN bundle check || bundle install --jobs 5 --retry 5 \
+ && bundle clean --force
+
+############################################
+
+WORKDIR $APP_ROOT
+COPY . $APP_ROOT
+
+### install node_modules ###################
+
+RUN bin/yarn install
+
+############################################
+
+EXPOSE 3000
