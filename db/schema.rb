@@ -10,9 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_28_173751) do
+ActiveRecord::Schema.define(version: 2021_11_04_154827) do
 
-  create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "body_stats", charset: "utf8mb3", collation: "utf8_unicode_ci", force: :cascade do |t|
+    t.bigint "user_id"
+    t.decimal "height", precision: 10
+    t.decimal "weight", precision: 10
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_body_stats_on_user_id"
+  end
+
+  create_table "users", charset: "utf8mb3", collation: "utf8_unicode_ci", force: :cascade do |t|
     t.string "email"
     t.string "password_digest"
     t.string "first_name"
