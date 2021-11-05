@@ -22,3 +22,27 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
+
+## Installation
+
+Requires install [docker](https://docs.docker.com/engine/install/ubuntu/) and [docker-compose](https://docs.docker.com/compose/install/) before to run.
+
+Run command to start the server.
+
+```
+cd food-diary
+docker-compose build
+docker-compose up
+```
+
+For run command for server.
+
+```
+docker-compose exec app bash
+```
+
+For run debug server.
+
+```
+docker attach $(docker-compose ps -q app)
+```

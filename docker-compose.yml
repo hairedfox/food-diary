@@ -1,0 +1,51 @@
+version: "3.2"
+services:
+  web:
+    build:
+      context: .
+      dockerfile: "Dockerfile-nginx"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./public:/usr/src/app/public
+      - ./nginx.conf:/etc/nginx/conf.d/nginx.conf
+    depends_on:
+      - app
+
+  app: &app_base
+    build:
+      context: .
+      dockerfile: "Dockerfile-ruby-dev"
+    command: bin/start_dev
+    volumes:
+      - bundle-data:/usr/local/bundle:cached
+      - .:/usr/src/app:cached
+      - /app/tmp # gem Bootsnap error回避
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    env_file:
+      - .env
+    tty: true
+    stdin_open: true
+
+  db:
+    image: mysql:8.0
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3306:3306"
+    env_file: .env
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./docker_init/db/init:/docker-entrypoint-initdb.d
+
+volumes:
+  bundle-data:
+  db-data:
+  redis-data:
+
+networks:
+  default:
+    driver: bridge
